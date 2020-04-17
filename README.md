@@ -1,5 +1,7 @@
 # DO NOT USE THIS CODE - IT IS FAULTY
 
+How to pass vectors in and out with foreign export from C to Haskell (main in C).
+
 ## This is OK.
 
 $ stack build --exec "main_VectorToSomething 10"
