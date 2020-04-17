@@ -9,7 +9,7 @@ sum:        45.000000
 
 
 
-## I thinkthis can give memory corruption (occasionally on my machine).
+## I think this can give memory corruption (occasionally on my machine).
 
 $ stack build --exec "main_SomethingToVector 10"
 output Vec: C_DoubleVector(size=10,[0.000000,1.000000,2.000000,3.000000,4.000000,5.000000,6.000000,7.000000,8.000000,9.000000,END])
