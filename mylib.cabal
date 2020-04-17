@@ -1,0 +1,62 @@
+name:           mylib
+version:        0.1.0.0
+description:    Version using Vector (BROKEN CODE - DO NOT USE)
+homepage:       https://github.com/githubuser/mylib#readme
+bug-reports:    https://github.com/githubuser/mylib/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+build-type:     Simple
+cabal-version:  >= 1.10
+
+
+executable main_SomethingToVector
+  main-is: SomethingToVector/main.c
+  install-includes: SomethingToVector/Lib_stub.h
+  other-modules:
+      StorableInstances
+      SomethingToVector.Lib
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , vector
+  default-language: Haskell2010
+
+
+executable main_VectorToSomething
+  main-is: VectorToSomething/main.c
+  install-includes: VectorToSomething/Lib_stub.h
+  other-modules:
+      StorableInstances
+      VectorToSomething.Lib
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , vector
+  default-language: Haskell2010
+
+
+executable main_VectorToVector
+  main-is: VectorToVector/main.c
+  install-includes: VectorToVector/Lib_stub.h
+  other-modules:
+      StorableInstances
+      VectorToVector.Lib
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , vector
+  default-language: Haskell2010

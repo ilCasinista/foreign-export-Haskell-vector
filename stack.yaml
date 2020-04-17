@@ -1,0 +1,31 @@
+# For advanced use and comprehensive documentation of the format, please see: http://docs.haskellstack.org/en/stable/yaml_configuration/
+
+resolver: nightly-2020-04-10
+
+#build:
+#  library-profiling: true
+#  executable-profiling: true
+
+packages:
+
+extra-deps:
+# - ../. # Do not remove.
+
+
+flags: {}
+
+extra-package-dbs: []
+
+#ghc-variant: integersimple
+#ghc-variant: standard
+
+# Override the architecture used by stack, especially useful on Windows
+# arch: i386
+# arch: x86_64
+
+ghc-options:
+  # Warnings.
+  "$locals": -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -fno-warn-unused-do-bind
+
+  # Optimizations.
+  "$locals": -O2 -funbox-strict-fields -fno-state-hack -fexpose-all-unfoldings
