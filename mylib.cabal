@@ -60,3 +60,23 @@ executable main_VectorToVector
       base >=4.7 && <5
     , vector
   default-language: Haskell2010
+
+
+executable main_StablePtr_Massiv
+  main-is: StablePtr_Massiv/main.c
+  install-includes: StablePtr_Massiv/Lib_stub.h
+  other-modules:
+      StorableInstances
+      StablePtr_Massiv.Lib
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , vector
+    , storable-tuple
+    , massiv
+  default-language: Haskell2010
+
