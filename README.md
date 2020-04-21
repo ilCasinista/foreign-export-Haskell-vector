@@ -1,11 +1,25 @@
-# DO NOT USE THIS CODE - IT IS FAULTY
+# DO NOT TRUST THIS CODE
+Folders marked as "_FAULTY" have memory corruption.
+
+## How to pass vectors in and out with foreign export from C to Haskell (main in C).
+
+# 2020-04-21
+
+Fix the code in folder StablePtr_Massiv apparently works,
+
+$ stack build --exec "main_StablePtr_Massiv 1000"
+
+
+Add the code in folder StablePtr_Vector apparently works,
+
+$ stack build --exec "main_StablePtr_Vector 1000"
+
 
 # 2020-04-19
 
 Apparently the code in folder StablePtr_Massiv works, although I am not 100% sure and I don't know if there are memory leaks.
 
 $ stack build --exec "main_StablePtr_Massiv 1000"
-
 
 
 # 2020-04-17
@@ -15,11 +29,7 @@ I opened this thread on Reddit:
 https://np.reddit.com/r/haskell/comments/g30xq2/haskell_ffi_foreign_export_and_vectors_help/
 
 
-
-
 # 2020-04-11 (OBSOLETE)
-
-## How to pass vectors in and out with foreign export from C to Haskell (main in C).
 
 Hello, I found enough information for "foreign import" in Haskell but not much on the "foreign export". 
 
@@ -63,7 +73,7 @@ Any help is appreciated. Thanks in advance.
 
 
 
-### This is OK.
+#### This apparently is OK.
 
 $ stack build --exec "main_VectorToSomething 10"
 input Vec:  C_DoubleVector(size=10,[0.000000,1.000000,2.000000,3.000000,4.000000,5.000000,6.000000,7.000000,8.000000,9.000000,END])
@@ -72,21 +82,16 @@ sum:        45.000000
 
 
 
-### I think this can give memory corruption (occasionally on my machine).
+#### Beware: memory corruption (probable).
 
 $ stack build --exec "main_SomethingToVector 10"
 output Vec: C_DoubleVector(size=10,[0.000000,1.000000,2.000000,3.000000,4.000000,5.000000,6.000000,7.000000,8.000000,9.000000,END])
 
 
 
-### This can give memory corruption (always on my machine).
+#### Beware: memory corruption (confirmed).
 
 $ stack build --exec "main_VectorToVector 100000"
 input Vec:  C_DoubleVector(size=10,[0.000000,1.000000,2.000000,3.000000,4.000000,[OMITTED],END])
 twice:      C_DoubleVector(size=10,[0.000000,2.000000,4.000000,6.000000,8.000000,[OMITTED],END])
 four times: C_DoubleVector(size=10,[0.000000,4.000000,8.000000,12.000000,16.000000,[OMITTED],0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,END]) (???)
-
-
-### OK?
-
-stack build --exec "main_UseStablePtr 10"

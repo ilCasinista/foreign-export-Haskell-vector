@@ -80,3 +80,21 @@ executable main_StablePtr_Massiv
     , massiv
   default-language: Haskell2010
 
+
+executable main_StablePtr_Vector
+  main-is: StablePtr_Vector/main.c
+  install-includes: StablePtr_Vector/Lib_stub.h
+  other-modules:
+      StorableInstances
+      StablePtr_Vector.Lib
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , vector
+    , storable-tuple
+    , massiv
+  default-language: Haskell2010
