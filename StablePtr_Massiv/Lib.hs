@@ -19,9 +19,6 @@ twiceVec csz srcPtr   czPtr dstPtrPtr = do
   srcArr <- flip (Massiv.unsafeArrayFromForeignPtr0 Massiv.Par) (Massiv.Sz $ fromIntegral csz) <$> newForeignPtr_ srcPtr
   dstArr <- Massiv.computeIO (Massiv.map (*2) srcArr)
 
-  dstArr_MUTABLE <- Massiv.thaw dstArr -- Should I use freeze somewhere?
-
   poke czPtr (fromIntegral . Massiv.unSz . Massiv.size $ dstArr)
-  Massiv.withPtr dstArr_MUTABLE $ poke dstPtrPtr
-
+  Massiv.unsafeWithPtr dstArr $ poke dstPtrPtr
   newStablePtr dstArr
