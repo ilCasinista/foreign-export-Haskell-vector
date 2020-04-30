@@ -1,4 +1,4 @@
-module SomethingToVector.Lib (somethingToVec) where
+module SomethingToVector_FAULTY.Lib (somethingToVec) where
 
 import qualified Data.Vector.Storable as VS
 import           Foreign

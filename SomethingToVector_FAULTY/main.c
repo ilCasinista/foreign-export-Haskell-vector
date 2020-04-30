@@ -4,7 +4,7 @@
 #include "HsFFI.h"
 
 #include "DoubleVector.h"
-#include "SomethingToVector/Lib_stub.h"
+#include "SomethingToVector_FAULTY/Lib_stub.h"
 
 
 void vector_free_c(C_DoubleVector* doubleVector) {free((void*)(doubleVector->c_doubleVectorPtr));free((void*)(doubleVector));}

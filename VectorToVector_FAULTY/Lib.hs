@@ -1,4 +1,4 @@
-module VectorToVector.Lib (twiceVec, free) where
+module VectorToVector_FAULTY.Lib (twiceVec, free) where
 
 import qualified Data.Vector.Storable as VS
 import           Foreign
