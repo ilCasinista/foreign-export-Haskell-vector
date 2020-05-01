@@ -4,11 +4,13 @@
 #include "HsFFI.h"
 
 #include "DoubleVector.h"
+#include "IntVector.h"
 #include "StablePtr_Vector_extractor/Lib_stub.h"
 #include "StablePtr_Vector_extractor/SomethingToVector_stub.h"
 
 
-void vector_free_c(C_DoubleVector* doubleVector) {free((void*)(doubleVector->c_doubleVectorPtr));free((void*)(doubleVector));}
+void vector_double_free_c(C_DoubleVector* doubleVector) {free((void*)(doubleVector->c_doubleVectorPtr));free((void*)(doubleVector));}
+void vector_int_free_c   (C_IntVector*    intVector)    {free((void*)(intVector->c_intVectorPtr));      free((void*)(intVector));}
 
 
 C_DoubleVector* doubleVector_enum(const int n)
@@ -16,14 +18,26 @@ C_DoubleVector* doubleVector_enum(const int n)
   if(cDoubleVector_ == NULL) {printf("\nNOT ENOUGH MEMORY.\n");  exit(2);};
   int cDoubleVecIndex = 0; while (cDoubleVecIndex < n)
       { cDoubleVector_[cDoubleVecIndex] = ((HsDouble) cDoubleVecIndex); cDoubleVecIndex++; }
-  C_DoubleVector* doubleVec = (C_DoubleVector*) malloc(sizeof(C_DoubleVector));
-  doubleVec->c_doubleVectorSize = (HsInt32) n;
-  doubleVec->c_doubleVectorPtr  = cDoubleVector_;
-  return doubleVec;
+  C_DoubleVector* double_vec = (C_DoubleVector*) malloc(sizeof(C_DoubleVector));
+  double_vec->c_doubleVectorSize = (HsInt32) n;
+  double_vec->c_doubleVectorPtr  = cDoubleVector_;
+  return double_vec;
 }
 
 
-char* int_show(HsInt32 c_int) {printf("%d",c_int);return NULL;}
+C_IntVector* intVector_enum(const int n)
+{ HsInt32* cIntVector_ = (HsInt32*) malloc(sizeof(HsInt32) * n);
+  if(cIntVector_ == NULL) {printf("\nNOT ENOUGH MEMORY.\n");  exit(2);};
+  int cIntVecIndex = 0; while (cIntVecIndex < n)
+      { cIntVector_[cIntVecIndex] = ((HsInt32) cIntVecIndex); cIntVecIndex++; }
+  C_IntVector* int_vec = (C_IntVector*) malloc(sizeof(C_IntVector));
+  int_vec->c_intVectorSize = (HsInt32) n;
+  int_vec->c_intVectorPtr  = cIntVector_;
+  return int_vec;
+}
+
+
+char* int_show(HsInt32 c_int) {printf("%d",c_int);}
 
 
 void double_show(HsDouble c_double) {printf("%f",c_double);}
@@ -38,14 +52,30 @@ void doubleVecPtr_show(C_DoubleVector c_doubleVector)
   printf("END])\n");
 }
 
-// Wrapper
-C_DoubleVector extractFromStablePtr_vector_hs_wrapper(HsStablePtr doubleVecStablePtr)
-{   // C_DoubleVector doubleVec; // Without inizialization (faster but harder to debug).
-    C_DoubleVector doubleVec = {.c_doubleVectorSize = 0, .c_doubleVectorPtr = NULL}; // With inizialization (slower but easier to debug).
-    extractFromStablePtr_vector_double_hs(doubleVecStablePtr,  &(doubleVec.c_doubleVectorSize), &(doubleVec.c_doubleVectorPtr));
-    return doubleVec;
+void intVecPtr_show(C_IntVector c_intVector)
+{ HsInt32   c_intVectorSize = c_intVector.c_intVectorSize;
+  HsInt32* c_intVectorPtr  = c_intVector.c_intVectorPtr;
+
+  printf("C_IntVector(size="); int_show(c_intVectorSize); printf(",[");
+  int j = 0; while(j < (int)c_intVectorSize) {int_show(c_intVectorPtr[j]); printf(","); j++;}
+  printf("END])\n");
 }
 
+
+// Wrapper
+C_DoubleVector extractFromStablePtr_vector_hs_double_wrapper(HsStablePtr vecStablePtr_double)
+{   // C_DoubleVector double_vec; // Without inizialization (faster but harder to debug).
+    C_DoubleVector double_vec = {.c_doubleVectorSize = 0, .c_doubleVectorPtr = NULL}; // With inizialization (slower but easier to debug).
+    extractFromStablePtr_vector_double_hs(vecStablePtr_double,  &(double_vec.c_doubleVectorSize), &(double_vec.c_doubleVectorPtr));
+    return double_vec;
+}
+
+C_IntVector extractFromStablePtr_vector_hs_int_wrapper(HsStablePtr vecStablePtr_int)
+{   // C_IntVector int_vec; // Without inizialization (faster but harder to debug).
+    C_IntVector int_vec = {.c_intVectorSize = 0, .c_intVectorPtr = NULL}; // With inizialization (slower but easier to debug).
+    extractFromStablePtr_vector_int_hs(vecStablePtr_int,  &(int_vec.c_intVectorSize), &(int_vec.c_intVectorPtr));
+    return int_vec;
+}
 
 
 int main (int argc, char *argv[])
@@ -56,16 +86,26 @@ int main (int argc, char *argv[])
 	hs_init(&argc, &argv);	
 
 
-    HsStablePtr doubleVecStablePtr = somethingToVec_double_hs(arg_int);
+
+    HsStablePtr vecStablePtr_double = somethingToVec_double_hs(arg_int);
+
+    C_DoubleVector double_vec = extractFromStablePtr_vector_hs_double_wrapper(vecStablePtr_double);
+    printf("result:     "); doubleVecPtr_show(double_vec);              printf("\n");
+
+    vector_double_free_hs(vecStablePtr_double); // From now on the internal array of double_vec is not available!
 
 
 
-    C_DoubleVector doubleVec = extractFromStablePtr_vector_hs_wrapper(doubleVecStablePtr);
-    printf("result:     "); doubleVecPtr_show(doubleVec);              printf("\n");
+
+    HsStablePtr vecStablePtr_int = somethingToVec_int_hs(arg_int);
+
+    C_IntVector int_vec = extractFromStablePtr_vector_hs_int_wrapper(vecStablePtr_int);
+    printf("result:     "); intVecPtr_show(int_vec);              printf("\n");
+
+    vector_int_free_hs(vecStablePtr_int); // From now on the internal array of int_vec is not available!
 
 
 
-    vector_double_free_hs(doubleVecStablePtr); // From now on the internal array of doubleVec is not available!
 
 	hs_exit();
 
