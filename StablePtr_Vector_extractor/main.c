@@ -38,6 +38,15 @@ void doubleVecPtr_show(C_DoubleVector c_doubleVector)
   printf("END])\n");
 }
 
+// Wrapper
+C_DoubleVector extractFromStablePtr_vector_hs_wrapper(HsStablePtr doubleVecStablePtr_INPUT)
+{   // C_DoubleVector doubleVec_OUTPUT; // Without inizialization (faster but harder to debug).
+    C_DoubleVector doubleVec_OUTPUT = {.c_doubleVectorSize = 0, .c_doubleVectorPtr = NULL}; // With inizialization (slower but easier to debug).
+    extractFromStablePtr_vector_hs(doubleVecStablePtr_INPUT,  &(doubleVec_OUTPUT.c_doubleVectorSize), &(doubleVec_OUTPUT.c_doubleVectorPtr));
+    return doubleVec_OUTPUT;
+}
+
+
 
 int main (int argc, char *argv[])
 {   if (argc < 2) {printf("Usage: %s <intNumber>\n", argv[0]);return 2;}
@@ -50,9 +59,8 @@ int main (int argc, char *argv[])
     HsStablePtr doubleVecStablePtr_INPUT = somethingToVec_hs(arg_int);
 
 
-    HsInt32 sz_OUTPUT = 0; HsDouble* doubleVecRawPtr_OUTPUT = NULL; // Inizialize
-    extractStablePtr_vector_hs(doubleVecStablePtr_INPUT,  &sz_OUTPUT, &doubleVecRawPtr_OUTPUT);
-    C_DoubleVector doubleVec_OUTPUT = (C_DoubleVector) {.c_doubleVectorSize = sz_OUTPUT, .c_doubleVectorPtr = doubleVecRawPtr_OUTPUT};
+
+    C_DoubleVector doubleVec_OUTPUT = extractFromStablePtr_vector_hs_wrapper(doubleVecStablePtr_INPUT);
     printf("result:     "); doubleVecPtr_show(doubleVec_OUTPUT);              printf("\n");
 
 
