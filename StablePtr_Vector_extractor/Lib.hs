@@ -3,7 +3,6 @@ module StablePtr_Vector_extractor.Lib (extractFromStablePtr_vector, free) where
 import           Foreign
 import           Foreign.C.Types
 import           Foreign.StablePtr
-import           StorableInstances
 import qualified Data.Vector.Storable as Vector (Vector,length,map,thaw,unsafeFromForeignPtr0,unsafeWith)
 
 
