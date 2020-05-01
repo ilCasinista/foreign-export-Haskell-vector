@@ -39,11 +39,11 @@ void doubleVecPtr_show(C_DoubleVector c_doubleVector)
 }
 
 // Wrapper
-C_DoubleVector extractFromStablePtr_vector_hs_wrapper(HsStablePtr doubleVecStablePtr_INPUT)
-{   // C_DoubleVector doubleVec_OUTPUT; // Without inizialization (faster but harder to debug).
-    C_DoubleVector doubleVec_OUTPUT = {.c_doubleVectorSize = 0, .c_doubleVectorPtr = NULL}; // With inizialization (slower but easier to debug).
-    extractFromStablePtr_vector_hs(doubleVecStablePtr_INPUT,  &(doubleVec_OUTPUT.c_doubleVectorSize), &(doubleVec_OUTPUT.c_doubleVectorPtr));
-    return doubleVec_OUTPUT;
+C_DoubleVector extractFromStablePtr_vector_hs_wrapper(HsStablePtr doubleVecStablePtr)
+{   // C_DoubleVector doubleVec; // Without inizialization (faster but harder to debug).
+    C_DoubleVector doubleVec = {.c_doubleVectorSize = 0, .c_doubleVectorPtr = NULL}; // With inizialization (slower but easier to debug).
+    extractFromStablePtr_vector_hs(doubleVecStablePtr,  &(doubleVec.c_doubleVectorSize), &(doubleVec.c_doubleVectorPtr));
+    return doubleVec;
 }
 
 
@@ -56,16 +56,16 @@ int main (int argc, char *argv[])
 	hs_init(&argc, &argv);	
 
 
-    HsStablePtr doubleVecStablePtr_INPUT = somethingToVec_hs(arg_int);
+    HsStablePtr doubleVecStablePtr = somethingToVec_hs(arg_int);
 
 
 
-    C_DoubleVector doubleVec_OUTPUT = extractFromStablePtr_vector_hs_wrapper(doubleVecStablePtr_INPUT);
-    printf("result:     "); doubleVecPtr_show(doubleVec_OUTPUT);              printf("\n");
+    C_DoubleVector doubleVec = extractFromStablePtr_vector_hs_wrapper(doubleVecStablePtr);
+    printf("result:     "); doubleVecPtr_show(doubleVec);              printf("\n");
 
 
 
-    vector_free_hs(doubleVecStablePtr_INPUT);
+    vector_free_hs(doubleVecStablePtr); // From now on the internal array of doubleVec is not available!
 
 	hs_exit();
 
