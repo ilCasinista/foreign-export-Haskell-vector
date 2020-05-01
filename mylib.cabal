@@ -122,5 +122,24 @@ executable main_StablePtr_Vector_extractor
       base >=4.7 && <5
     , vector
     , storable-tuple
+  default-language: Haskell2010
+
+
+executable main_StablePtr_Massiv_extractor
+  main-is: StablePtr_Massiv_extractor/main.c
+  install-includes: StablePtr_Massiv_extractor/Lib_stub.h
+                    StablePtr_Massiv_extractor/SomethingToMassiv_stub.h
+  other-modules:
+      StorableInstances_Massiv
+      StablePtr_Massiv_extractor.Lib
+      StablePtr_Massiv_extractor.SomethingToMassiv
+  hs-source-dirs:
+      .
+  include-dirs:
+      .
+  ghc-options: -threaded
+  build-depends:
+      base >=4.7 && <5
+    , storable-tuple
     , massiv
   default-language: Haskell2010
